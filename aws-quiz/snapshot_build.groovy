@@ -1,10 +1,10 @@
 node('devops.kennie-ng.cc') {
-    def BRANCH='develop'
-    def GITHUB_URL='https://github.com/jundywoo/AWS_Projects.git/'
-    
+    def BRANCH = 'develop'
+    def PROJECT_URL = 'https://github.com/jundywoo/AWS_Projects.git/'
+
     try {
         stage('Github SCM') {
-          git([url: GITHUB_URL, branch: BRANCH])
+          git branch: BRANCH, url: PROJECT_URL, credentialsId: 'a1db2c2a-ccf4-4366-83de-1d47aa2fe9fd'
         
             def pom = readMavenPom file: 'aws-quiz/pom.xml'
            def version = pom.version
@@ -17,7 +17,7 @@ node('devops.kennie-ng.cc') {
       }
     
       stage('Nexus Deploy') {
-           sh "mvn deploy -Dmaven.test.skip=true -DskipDockerPush -f aws-quiz/pom.xml"
+          sh "mvn deploy -Dmaven.test.skip=true -DskipDockerPush -f aws-quiz/pom.xml"
        }
        
        currentBuild.result = 'SUCCESS'
